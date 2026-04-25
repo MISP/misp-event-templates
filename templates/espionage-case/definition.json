@@ -1,0 +1,271 @@
+{
+  "default": true,
+  "description": "Capture indicators and suspicious behaviours linked to possible cyber espionage activity, especially where data exfiltration is confirmed or strongly suspected. Use this template to structure host, account, and network evidence while triage or investigation is ongoing.",
+  "event_defaults": {
+    "analysis": 1,
+    "distribution": 1,
+    "info_template": "Espionage case — {{field:date_first_observed}} — {{field:primary_target}}",
+    "tags": [
+      {
+        "locked": false,
+        "name": "tlp:amber"
+      }
+    ],
+    "threat_level_id": 2
+  },
+  "library_metadata": {
+    "authors": [
+      {
+        "contact": "info@misp-project.org",
+        "name": "MISP Project"
+      }
+    ],
+    "compatible_misp_version": "2.5.0",
+    "tags": [
+      "incident-response",
+      "espionage",
+      "exfiltration",
+      "intrusion"
+    ]
+  },
+  "name": "Espionage case triage",
+  "schema_version": 1,
+  "structure": [
+    {
+      "help": "High-level details for quickly orienting responders and intelligence teams.",
+      "id": "s_overview",
+      "label": "Case overview",
+      "type": "section"
+    },
+    {
+      "help": "When suspicious activity was first observed in the environment. ISO 8601 format, for example `2026-04-25T03:42:00Z`.",
+      "id": "date_first_observed",
+      "label": "Date first observed",
+      "mandatory": true,
+      "misp": {
+        "category": "Other",
+        "type": "datetime"
+      },
+      "parent": "s_overview",
+      "type": "attribute_field"
+    },
+    {
+      "help": "Primary system, user, or business unit believed to be targeted. Keep this concise; full scoping can be added in the event report.",
+      "id": "primary_target",
+      "label": "Primary target",
+      "mandatory": true,
+      "misp": {
+        "category": "Targeting data",
+        "type": "target-org"
+      },
+      "parent": "s_overview",
+      "type": "attribute_field"
+    },
+    {
+      "help": "One or two sentences describing why this is suspected to be espionage (e.g., focused collection, stealthy persistence, sensitive data access).",
+      "id": "case_summary",
+      "label": "Short case summary",
+      "mandatory": false,
+      "misp": {
+        "category": "Other",
+        "type": "comment"
+      },
+      "parent": "s_overview",
+      "type": "attribute_field"
+    },
+    {
+      "help": "Capture confirmed or suspected data theft indicators. Add as many entries as needed.",
+      "id": "s_exfiltration",
+      "label": "Exfiltration indicators",
+      "type": "section"
+    },
+    {
+      "help": "External destination IP that received suspicious outbound traffic associated with this case.",
+      "id": "exfil_ip",
+      "label": "Exfiltration destination IP",
+      "mandatory": false,
+      "misp": {
+        "category": "Network activity",
+        "to_ids_default": true,
+        "type": "ip-dst"
+      },
+      "parent": "s_exfiltration",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Domain observed in exfiltration traffic or command-and-control activity tied to possible collection/extraction.",
+      "id": "exfil_domain",
+      "label": "Exfiltration or C2 domain",
+      "mandatory": false,
+      "misp": {
+        "category": "Network activity",
+        "to_ids_default": true,
+        "type": "domain"
+      },
+      "parent": "s_exfiltration",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Full URL used for staging or exfiltration (for example cloud storage links, webdav paths, API endpoints).",
+      "id": "exfil_url",
+      "label": "Exfiltration URL",
+      "mandatory": false,
+      "misp": {
+        "category": "Network activity",
+        "to_ids_default": true,
+        "type": "url"
+      },
+      "parent": "s_exfiltration",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Estimated volume of data transferred out (for example `12 GB`, `350 MB`, `unknown`). Stored as text because units vary.",
+      "id": "estimated_exfil_volume",
+      "label": "Estimated exfiltrated data volume",
+      "mandatory": false,
+      "misp": {
+        "category": "Other",
+        "type": "text"
+      },
+      "parent": "s_exfiltration",
+      "type": "attribute_field"
+    },
+    {
+      "help": "Digest, archive, or staged file artifacts that may represent collected/exfiltrated data.",
+      "id": "staged_archive_name",
+      "label": "Staged archive or collection filename",
+      "mandatory": false,
+      "misp": {
+        "category": "Payload installation",
+        "type": "filename"
+      },
+      "parent": "s_exfiltration",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Host and account behaviours commonly linked with espionage tradecraft.",
+      "id": "s_behavior",
+      "label": "Suspicious behavior",
+      "type": "section"
+    },
+    {
+      "help": "Hostname where suspicious collection, staging, or beaconing behavior was observed.",
+      "id": "affected_hostname",
+      "label": "Affected hostname",
+      "mandatory": false,
+      "misp": {
+        "category": "Targeting data",
+        "type": "target-machine"
+      },
+      "parent": "s_behavior",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "User account associated with unusual access patterns, suspicious authentication, or data collection activity.",
+      "id": "suspicious_account",
+      "label": "Suspicious account",
+      "mandatory": false,
+      "misp": {
+        "category": "Targeting data",
+        "type": "target-user"
+      },
+      "parent": "s_behavior",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Process name or command used for discovery, collection, compression, or covert transfer.",
+      "id": "suspicious_process",
+      "label": "Suspicious process or command",
+      "mandatory": false,
+      "misp": {
+        "category": "Payload installation",
+        "type": "text"
+      },
+      "parent": "s_behavior",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Registry key, launch item, service, scheduled task, or other persistence indicator linked to this case.",
+      "id": "persistence_indicator",
+      "label": "Persistence indicator",
+      "mandatory": false,
+      "misp": {
+        "category": "Persistence mechanism",
+        "to_ids_default": true,
+        "type": "regkey"
+      },
+      "parent": "s_behavior",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Known or suspected malicious file hash tied to this activity. Prefer SHA-256.",
+      "id": "malicious_file_hash",
+      "label": "Malicious file hash",
+      "mandatory": false,
+      "misp": {
+        "category": "Payload installation",
+        "to_ids_default": true,
+        "type": "sha256"
+      },
+      "parent": "s_behavior",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Classification and sharing controls.",
+      "id": "s_classification",
+      "label": "Classification and attribution",
+      "type": "section"
+    },
+    {
+      "help": "Pick one. Override the default if handling requirements differ from `tlp:amber`.",
+      "id": "tlp",
+      "label": "TLP",
+      "mandatory": true,
+      "multiple": false,
+      "parent": "s_classification",
+      "restrict_taxonomies": [
+        "tlp"
+      ],
+      "type": "tag_field"
+    },
+    {
+      "help": "Optional. Mark ATT&CK techniques linked to this case, especially collection, credential access, lateral movement, command-and-control, and exfiltration techniques.",
+      "id": "attack_pattern",
+      "label": "MITRE ATT&CK technique",
+      "mandatory": false,
+      "multiple": true,
+      "parent": "s_classification",
+      "restrict_galaxy_types": [
+        "mitre-attack-pattern"
+      ],
+      "type": "galaxy_field"
+    },
+    {
+      "help": "Optional. Only fill this if evidence quality supports attribution.",
+      "id": "threat_actor",
+      "label": "Suspected threat actor",
+      "mandatory": false,
+      "multiple": false,
+      "parent": "s_classification",
+      "restrict_galaxy_types": [
+        "threat-actor"
+      ],
+      "type": "galaxy_field"
+    },
+    {
+      "content": "**Follow-up:** if exfiltration is confirmed later, update this event with final scope and evidence references (packet captures, proxy logs, EDR timelines, or case IDs) in an event report.",
+      "id": "note_followup",
+      "type": "text_block"
+    }
+  ],
+  "uuid": "294bf4d1-c2b2-47ed-94d4-07ef5a3730e3"
+}
