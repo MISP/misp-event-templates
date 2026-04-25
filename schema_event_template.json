@@ -31,9 +31,9 @@
         "null"
       ]
     },
-    "default": {
+    "misp_default": {
       "type": "boolean",
-      "description": "Library-managed flag. When true, MISP's `Update from library` flow will overwrite this template on every upstream version bump; when false (the operator has forked it on their instance), updates skip this row. Library PR review enforces `true` on every shipped template."
+      "description": "Library-managed flag. When true, MISP's `Update from library` flow will overwrite this template on every upstream version bump; when false (the operator has forked it on their instance), updates skip this row. Library PR review enforces `true` on every shipped template. Named `misp_default` rather than `default` because the latter is a MySQL reserved word and clashes with Cake's read-side result mapping."
     },
     "library_metadata": {
       "type": "object",

@@ -1,5 +1,4 @@
 {
-  "default": true,
   "description": "Capture a ransomware incident in a single pass: family / variant, observation date, affected scope, network indicators, malware-sample hashes, ransom note details, and attribution. Designed to be filled while triage is still ongoing.",
   "event_defaults": {
     "analysis": 1,
@@ -28,6 +27,7 @@
       "extortion"
     ]
   },
+  "misp_default": true,
   "name": "Ransomware incident",
   "schema_version": 1,
   "structure": [

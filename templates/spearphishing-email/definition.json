@@ -1,5 +1,4 @@
 {
-  "default": true,
   "description": "Extract IOCs from a flagged email and structure them for downstream detection. Use for any inbound email reported by a user or flagged by a gateway as suspicious — credential phishing, malware delivery, BEC, or otherwise.",
   "event_defaults": {
     "analysis": 0,
@@ -28,6 +27,7 @@
       "spearphishing"
     ]
   },
+  "misp_default": true,
   "name": "Spearphishing email triage",
   "schema_version": 1,
   "structure": [
