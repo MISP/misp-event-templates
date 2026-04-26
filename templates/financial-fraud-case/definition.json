@@ -185,8 +185,8 @@
       "label": "Suspicious bank account",
       "mandatory": true,
       "object_template": {
+        "minimum_version": 1,
         "name": "bank-account",
-        "pinned_version": 1,
         "uuid": "ec7fbe43-f4a5-4f5d-8e2f-4d67df5da95b"
       },
       "parent": "s_bank_accounts",
