@@ -1,5 +1,4 @@
 {
-  "default": true,
   "description": "Capture indicators and suspicious behaviours linked to possible cyber espionage activity, especially where data exfiltration is confirmed or strongly suspected. Use this template to structure host, account, and network evidence while triage or investigation is ongoing.",
   "event_defaults": {
     "analysis": 1,
@@ -28,6 +27,7 @@
       "intrusion"
     ]
   },
+  "misp_default": true,
   "name": "Espionage case triage",
   "schema_version": 1,
   "structure": [
