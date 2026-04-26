@@ -56,7 +56,7 @@ screenshots, a per-template README) without changing the layout.
 | `credential-exposure` | Paste-site dumps, breach marketplace listings, OSINT tips, HIBP-style notifications. |
 | `suspicious-domain-triage` | First-pass triage on a flagged domain — WHOIS + DNS resolution objects + observed URLs. |
 | `malware-sample-submission` | Analyst-with-the-binary submission — full hash set + AV labels + sandbox C2 indicators. |
-| `vulnerability-disclosure` | Tracking a CVE relevant to the org — fresh CVE, 0-day rumour, in-the-wild exploitation. |
+| `vulnerability-disclosure` | Tracking a vulnerability relevant to the org using CVE/GCVE/GHSA/advisory IDs — fresh disclosure, 0-day rumour, in-the-wild exploitation. |
 | `supply-chain-compromise` | Backdoored npm/PyPI/cargo package, compromised Docker image, malicious GitHub Action. |
 
 PRs to add new templates are welcome — see [CONTRIBUTE.md](CONTRIBUTE.md).
