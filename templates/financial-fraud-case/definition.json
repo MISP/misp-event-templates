@@ -151,7 +151,7 @@
       "label": "Fraud contact email",
       "mandatory": false,
       "misp": {
-        "category": "Financial fraud",
+        "category": "Network activity",
         "to_ids_default": true,
         "type": "email-src"
       },
@@ -165,7 +165,7 @@
       "label": "Fraud portal / payment URL",
       "mandatory": false,
       "misp": {
-        "category": "Financial fraud",
+        "category": "Network activity",
         "to_ids_default": true,
         "type": "url"
       },
@@ -185,9 +185,9 @@
       "label": "Suspicious bank account",
       "mandatory": true,
       "object_template": {
-        "minimum_version": 1,
+        "minimum_version": 3,
         "name": "bank-account",
-        "uuid": "ec7fbe43-f4a5-4f5d-8e2f-4d67df5da95b"
+        "uuid": "b4712203-95a8-4883-80e9-b566f5df11c9"
       },
       "parent": "s_bank_accounts",
       "relations": [
