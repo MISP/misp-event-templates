@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://misp-project.org/schemas/event-template-library-v1.json",
   "title": "MISP Event Template (library variant) v1",
-  "description": "Library-side schema for an event template's `definition.json` document. Superset of MISP core's event-template-v1.schema.json — adds two optional top-level fields (`default`, `library_metadata`) used by the library auto-update flow on operator instances. Semantic validation (attribute category+type validity, object template existence at pinned_version, cross-element id references, info_template variable ids pointing at real elements) is performed by MISP core's EventTemplateValidator on import, not here.",
+  "description": "Library-side schema for an event template's `definition.json` document. Superset of MISP core's event-template-v1.schema.json — adds two optional top-level fields (`default`, `library_metadata`) used by the library auto-update flow on operator instances. Semantic validation (attribute category+type validity, object template existence at minimum_version, cross-element id references, info_template variable ids pointing at real elements) is performed by MISP core's EventTemplateValidator on import, not here.",
   "type": "object",
   "required": [
     "schema_version",
@@ -386,7 +386,7 @@
           "required": [
             "uuid",
             "name",
-            "pinned_version"
+            "minimum_version"
           ],
           "additionalProperties": false,
           "properties": {
@@ -398,7 +398,7 @@
               "type": "string",
               "minLength": 1
             },
-            "pinned_version": {
+            "minimum_version": {
               "type": "integer",
               "minimum": 1
             }

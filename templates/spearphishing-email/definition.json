@@ -102,8 +102,8 @@
       "label": "Email message",
       "mandatory": false,
       "object_template": {
+        "minimum_version": 19,
         "name": "email",
-        "pinned_version": 19,
         "uuid": "a0c666e0-fc65-4be8-b48f-3423d788b552"
       },
       "parent": "s_email_object",
@@ -153,8 +153,8 @@
       "label": "Attached file",
       "mandatory": false,
       "object_template": {
+        "minimum_version": 25,
         "name": "file",
-        "pinned_version": 25,
         "uuid": "688c46fb-5edb-40a3-8273-1af7923e2215"
       },
       "parent": "s_attachments",

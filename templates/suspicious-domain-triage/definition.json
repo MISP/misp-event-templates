@@ -100,8 +100,8 @@
       "label": "Domain → IP resolution",
       "mandatory": false,
       "object_template": {
+        "minimum_version": 11,
         "name": "domain-ip",
-        "pinned_version": 11,
         "uuid": "43b3b146-77eb-4931-b4cc-b66c60f28734"
       },
       "parent": "s_dns",
@@ -146,8 +146,8 @@
       "label": "WHOIS",
       "mandatory": false,
       "object_template": {
+        "minimum_version": 10,
         "name": "whois",
-        "pinned_version": 10,
         "uuid": "429faea1-34ff-47af-8a00-7c62d3be5a6a"
       },
       "parent": "s_whois",
