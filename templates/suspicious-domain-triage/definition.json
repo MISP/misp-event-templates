@@ -77,16 +77,12 @@
       "type": "attribute_field"
     },
     {
-      "help": "One or two sentences. Lookalike of a brand domain? Newly-registered? Hosting a phishing kit? Visible Unicode form (for IDNs)? Triage notes.",
+      "help": "Free-form Markdown — what makes the domain suspicious. Lookalike of a brand domain? Newly-registered? Hosting a phishing kit? Visible Unicode form (for IDNs)? Saved as an EventReport attached to the new event.",
       "id": "why_suspicious",
       "label": "Why suspicious",
       "mandatory": false,
-      "misp": {
-        "category": "Other",
-        "type": "comment"
-      },
       "parent": "s_overview",
-      "type": "attribute_field"
+      "type": "event_report"
     },
     {
       "help": "What the domain currently resolves to. Capture a snapshot — fast-flux operators may rotate the answer minute by minute.",
