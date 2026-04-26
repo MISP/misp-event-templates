@@ -1,0 +1,326 @@
+{
+  "description": "Capture a UAV/drone observation for civil safety monitoring, military situational awareness, or intelligence collection. Includes drone platform details, sighting location, observed behavior, and optional attribution.",
+  "event_defaults": {
+    "analysis": 1,
+    "distribution": 1,
+    "info_template": "UAV observation — {{field:observation_context}} — {{field:date_observed}}",
+    "tags": [
+      {
+        "locked": false,
+        "name": "tlp:amber"
+      }
+    ],
+    "threat_level_id": 2
+  },
+  "library_metadata": {
+    "authors": [
+      {
+        "contact": "info@misp-project.org",
+        "name": "MISP Project"
+      }
+    ],
+    "compatible_misp_version": "2.5.0",
+    "tags": [
+      "uav",
+      "drone",
+      "observation",
+      "situational-awareness",
+      "incident-response"
+    ]
+  },
+  "misp_default": true,
+  "name": "UAV observation",
+  "schema_version": 1,
+  "structure": [
+    {
+      "help": "Capture the minimum context required to route the event to the right operational team.",
+      "id": "s_overview",
+      "label": "Observation overview",
+      "type": "section"
+    },
+    {
+      "help": "Choose the operational framing for this report. Suggested values: `civil`, `military`, `intelligence`.",
+      "id": "observation_context",
+      "label": "Observation context",
+      "mandatory": true,
+      "misp": {
+        "category": "Internal reference",
+        "type": "text"
+      },
+      "parent": "s_overview",
+      "type": "attribute_field"
+    },
+    {
+      "help": "When the UAV activity was observed. Use UTC when possible (for example `2026-04-26T14:20:00Z`).",
+      "id": "date_observed",
+      "label": "Date observed",
+      "mandatory": true,
+      "misp": {
+        "category": "Other",
+        "type": "datetime"
+      },
+      "parent": "s_overview",
+      "type": "attribute_field"
+    },
+    {
+      "help": "One- or two-sentence snapshot: what was observed, where, and why it matters.",
+      "id": "summary",
+      "label": "Short summary",
+      "mandatory": false,
+      "misp": {
+        "category": "Other",
+        "type": "comment"
+      },
+      "parent": "s_overview",
+      "type": "attribute_field"
+    },
+    {
+      "help": "UAV platform details using the dedicated MISP `uav` object template.",
+      "id": "s_platform",
+      "label": "UAV platform",
+      "type": "section"
+    },
+    {
+      "help": "Populate the most reliable platform identifiers first (manufacturer, model, serial number). Add mission clues when known.",
+      "id": "obj_uav",
+      "label": "Observed UAV",
+      "mandatory": true,
+      "object_template": {
+        "name": "uav",
+        "pinned_version": 4,
+        "uuid": "1d103a64-e30d-4c8c-931c-3e86b83db992"
+      },
+      "parent": "s_platform",
+      "relations": [
+        {
+          "help_override": "Manufacturer name (for example `DJI`, `Parrot`, `Autel`).",
+          "label_override": "Manufacturer",
+          "mandatory": false,
+          "object_relation": "manufacturer"
+        },
+        {
+          "help_override": "Product family/model (for example `Mavic 3`, `Anafi USA`).",
+          "label_override": "Model",
+          "mandatory": false,
+          "object_relation": "model"
+        },
+        {
+          "help_override": "Unique serial if recovered from telemetry, remote-ID feed, or physical access.",
+          "label_override": "Serial number",
+          "mandatory": false,
+          "object_relation": "serial-number"
+        },
+        {
+          "help_override": "Useful when the same model has sub-variants with different capabilities.",
+          "label_override": "Variant",
+          "mandatory": false,
+          "object_relation": "variant"
+        },
+        {
+          "help_override": "Mission class from observation (for example surveillance, delivery, mapping, attack).",
+          "label_override": "Mission type",
+          "mandatory": false,
+          "object_relation": "mission-type"
+        },
+        {
+          "help_override": "Assessment of mission intent when available (for example hostile, neutral, unknown).",
+          "label_override": "Mission intent",
+          "mandatory": false,
+          "object_relation": "mission-intent"
+        },
+        {
+          "help_override": "Known or suspected operator entity/person.",
+          "label_override": "Operator",
+          "mandatory": false,
+          "object_relation": "operator"
+        },
+        {
+          "help_override": "Any official registration identifier observed in the field.",
+          "label_override": "Registration ID",
+          "mandatory": false,
+          "object_relation": "registration-id"
+        },
+        {
+          "help_override": "Attach GPX/KML or equivalent path evidence when available.",
+          "label_override": "Flight path evidence",
+          "mandatory": false,
+          "object_relation": "flight-path"
+        },
+        {
+          "help_override": "Attach photo(s) of the observed UAV.",
+          "label_override": "UAV picture",
+          "mandatory": false,
+          "object_relation": "picture"
+        },
+        {
+          "help_override": "Free-form analyst note specific to the UAV object.",
+          "label_override": "UAV notes",
+          "mandatory": false,
+          "object_relation": "notes"
+        }
+      ],
+      "repeatable": true,
+      "type": "object_field"
+    },
+    {
+      "help": "Where the UAV activity was observed.",
+      "id": "s_location",
+      "label": "Observation location",
+      "type": "section"
+    },
+    {
+      "help": "Use precise coordinates when available; otherwise city/region/country is sufficient.",
+      "id": "obj_geo",
+      "label": "Sighting geolocation",
+      "mandatory": true,
+      "object_template": {
+        "name": "geolocation",
+        "pinned_version": 8,
+        "uuid": "cd6f2238-ba55-4888-82c4-104e6e1acf21"
+      },
+      "parent": "s_location",
+      "relations": [
+        {
+          "label_override": "Latitude",
+          "mandatory": false,
+          "object_relation": "latitude"
+        },
+        {
+          "label_override": "Longitude",
+          "mandatory": false,
+          "object_relation": "longitude"
+        },
+        {
+          "help_override": "Altitude in meters if known from telemetry or sensor fusion.",
+          "label_override": "Altitude",
+          "mandatory": false,
+          "object_relation": "altitude"
+        },
+        {
+          "label_override": "City",
+          "mandatory": false,
+          "object_relation": "city"
+        },
+        {
+          "label_override": "Region",
+          "mandatory": false,
+          "object_relation": "region"
+        },
+        {
+          "label_override": "Country",
+          "mandatory": false,
+          "object_relation": "country"
+        },
+        {
+          "help_override": "Human-readable location context (for example near critical infrastructure, border crossing, event venue).",
+          "label_override": "Location notes",
+          "mandatory": false,
+          "object_relation": "text"
+        }
+      ],
+      "repeatable": true,
+      "type": "object_field"
+    },
+    {
+      "comment": "Observed UAV linked to the location where it was sighted",
+      "from": "obj_uav",
+      "id": "ref_uav_location",
+      "relationship_type": "located-at",
+      "to": "obj_geo",
+      "type": "object_reference"
+    },
+    {
+      "help": "Additional indicators and references collected during the observation.",
+      "id": "s_indicators",
+      "label": "Indicators and references",
+      "type": "section"
+    },
+    {
+      "help": "Controller or telemetry endpoint observed during interception, RF analysis, or network capture.",
+      "id": "c2_or_control_url",
+      "label": "Control endpoint URL",
+      "mandatory": false,
+      "misp": {
+        "category": "Network activity",
+        "to_ids_default": true,
+        "type": "url"
+      },
+      "parent": "s_indicators",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Case reference, external advisory, NOTAM, or intelligence report URL.",
+      "id": "reference_url",
+      "label": "Reference URL",
+      "mandatory": false,
+      "misp": {
+        "category": "External analysis",
+        "type": "link"
+      },
+      "parent": "s_indicators",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "TLP, source reliability, and optional attribution tags/clusters.",
+      "id": "s_classification",
+      "label": "Classification and attribution",
+      "type": "section"
+    },
+    {
+      "help": "Pick one TLP value for sharing constraints.",
+      "id": "tlp",
+      "label": "TLP",
+      "mandatory": true,
+      "multiple": false,
+      "parent": "s_classification",
+      "restrict_taxonomies": [
+        "tlp"
+      ],
+      "type": "tag_field"
+    },
+    {
+      "help": "Optional intelligence confidence coding for source reliability and information credibility.",
+      "id": "admiralty_scale",
+      "label": "Admiralty scale",
+      "mandatory": false,
+      "multiple": false,
+      "parent": "s_classification",
+      "restrict_taxonomies": [
+        "admiralty-scale"
+      ],
+      "type": "tag_field"
+    },
+    {
+      "help": "Optional. Use when there is grounded evidence for actor attribution.",
+      "id": "threat_actor",
+      "label": "Associated threat actor",
+      "mandatory": false,
+      "multiple": false,
+      "parent": "s_classification",
+      "restrict_galaxy_types": [
+        "threat-actor"
+      ],
+      "type": "galaxy_field"
+    },
+    {
+      "help": "Optional. Associate the event with a country cluster when this is operationally relevant and supported.",
+      "id": "country",
+      "label": "Associated country",
+      "mandatory": false,
+      "multiple": false,
+      "parent": "s_classification",
+      "restrict_galaxy_types": [
+        "country"
+      ],
+      "type": "galaxy_field"
+    },
+    {
+      "content": "**Operational note:** use this template for both safety observations and hostile-UAV reporting. If evidence is weak, leave optional attribution fields blank and rely on factual UAV/object/location data first.",
+      "id": "note_guidance",
+      "type": "text_block"
+    }
+  ],
+  "uuid": "d33ba254-707a-4eb7-a168-c8bb8c3b1730"
+}
