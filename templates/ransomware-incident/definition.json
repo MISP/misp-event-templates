@@ -62,16 +62,13 @@
       "type": "attribute_field"
     },
     {
-      "help": "One or two sentences. What happened, what's affected, what's the current status. The detailed write-up belongs in an event report; this is just orientation for someone scanning the events index.",
+      "default_content": "## What happened\n\n_Brief description of the encryption / extortion event._\n\n## Affected systems\n\n- \n\n## Current status\n\n_Containment, recovery, negotiation posture._",
+      "help": "Free-form Markdown — what happened, what's affected, what's the current status. Saved as an EventReport attached to the new event.",
       "id": "incident_summary",
-      "label": "Short incident summary",
+      "label": "Incident summary",
       "mandatory": false,
-      "misp": {
-        "category": "Other",
-        "type": "comment"
-      },
       "parent": "s_overview",
-      "type": "attribute_field"
+      "type": "event_report"
     },
     {
       "help": "Roughly what was hit. Don't try to be exhaustive — capture representative items, full host inventories belong in the case-management system.",
