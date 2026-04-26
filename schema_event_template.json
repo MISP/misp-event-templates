@@ -225,6 +225,9 @@
           "$ref": "#/definitions/element_file_field"
         },
         {
+          "$ref": "#/definitions/element_event_report"
+        },
+        {
           "$ref": "#/definitions/element_object_reference"
         }
       ]
@@ -572,6 +575,46 @@
         },
         "mandatory": {
           "type": "boolean"
+        }
+      }
+    },
+    "element_event_report": {
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "label"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "event_report"
+        },
+        "id": {
+          "$ref": "#/definitions/identifier"
+        },
+        "parent": {
+          "$ref": "#/definitions/identifier"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "help": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mandatory": {
+          "type": "boolean"
+        },
+        "default_content": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Markdown body the user starts editing from on instantiation. Filled value creates an EventReport row attached to the resulting event."
         }
       }
     },
