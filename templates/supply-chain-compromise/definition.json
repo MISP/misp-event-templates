@@ -74,16 +74,13 @@
       "type": "attribute_field"
     },
     {
-      "help": "One or two sentences orienting a reader. What got compromised, how was the malice introduced (typosquat / hijacked maintainer / subdomain takeover / build-system breach / hardware), and how was it discovered.",
+      "default_content": "## What was compromised\n\n_Component / package / vendor and the rough scope._\n\n## Compromise vector\n\n_Typosquat, hijacked maintainer, subdomain takeover, build-system breach, hardware tamper, etc._\n\n## How it was discovered\n\n_Detection path — log monitoring, SCA tool, downstream report, vendor advisory._",
+      "help": "Free-form Markdown — what got compromised, the compromise vector, and how it was discovered. Saved as an EventReport attached to the new event.",
       "id": "summary",
-      "label": "Short summary",
+      "label": "Summary",
       "mandatory": false,
-      "misp": {
-        "category": "Other",
-        "type": "comment"
-      },
       "parent": "s_overview",
-      "type": "attribute_field"
+      "type": "event_report"
     },
     {
       "help": "Which versions of the component carry the malicious code. Operators downstream need this to scope their exposure.",
@@ -230,16 +227,13 @@
       "type": "attribute_field"
     },
     {
-      "help": "Free-form. What does the malicious code do, and what triggers it? e.g. *Only fires when CI=true and GITHUB_REPOSITORY contains 'ethereum'*. Crucial for triage scoping.",
+      "default_content": "## Behaviour\n\n_What does the malicious code do once it executes?_\n\n## Trigger conditions\n\n_Environmental conditioning that gates execution — CI flag, repo name match, time window, hostname pattern, etc. Crucial for triage scoping._",
+      "help": "Free-form Markdown — what the malicious code does, and (critically) what gates it. Many supply-chain payloads only fire in specific environments — capture the trigger so downstream readers know whether they're exposed. Saved as an EventReport attached to the new event.",
       "id": "behaviour_notes",
       "label": "Behaviour notes",
       "mandatory": false,
-      "misp": {
-        "category": "Other",
-        "type": "comment"
-      },
       "parent": "s_payload",
-      "type": "attribute_field"
+      "type": "event_report"
     },
     {
       "help": "Upstream advisory, security blog post, vendor incident page.",
