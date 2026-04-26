@@ -86,8 +86,8 @@
       "label": "Observed UAV",
       "mandatory": true,
       "object_template": {
+        "minimum_version": 4,
         "name": "uav",
-        "pinned_version": 4,
         "uuid": "1d103a64-e30d-4c8c-931c-3e86b83db992"
       },
       "parent": "s_platform",
@@ -174,8 +174,8 @@
       "label": "Sighting geolocation",
       "mandatory": true,
       "object_template": {
+        "minimum_version": 8,
         "name": "geolocation",
-        "pinned_version": 8,
         "uuid": "cd6f2238-ba55-4888-82c4-104e6e1acf21"
       },
       "parent": "s_location",
