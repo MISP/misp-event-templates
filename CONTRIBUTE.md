@@ -60,8 +60,10 @@ are not required.
 A `definition.json` is a JSON document conforming to
 `schema_event_template.json`. Every shipped template carries:
 
-- `"default": true` — opts the template into MISP's library
-  auto-update flow on operator instances.
+- `"misp_default": true` — opts the template into MISP's library
+  auto-update flow on operator instances. Named `misp_default`
+  rather than `default` because the latter is a MySQL reserved word
+  that conflicts with Cake's read-side result mapping.
 - `"library_metadata"` — at minimum `authors` and `tags`. The
   `compatible_misp_version` field is recommended; the loader uses
   it to refuse incompatible templates.

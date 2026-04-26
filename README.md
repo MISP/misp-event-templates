@@ -47,12 +47,27 @@ Each template lives in its own directory under `templates/` so the
 folder can later carry per-template extras (an example event,
 screenshots, a per-template README) without changing the layout.
 
+## Templates included
+
+| Slug | Use case |
+|---|---|
+| `spearphishing-email` | Inbound email reported as suspicious — credential phishing, malware delivery, BEC. Email + attachment objects. |
+| `ransomware-incident` | Ongoing ransomware response — family / variant, affected scope, network indicators, sample hashes, ransom note. |
+| `credential-exposure` | Paste-site dumps, breach marketplace listings, OSINT tips, HIBP-style notifications. |
+| `suspicious-domain-triage` | First-pass triage on a flagged domain — WHOIS + DNS resolution objects + observed URLs. |
+| `malware-sample-submission` | Analyst-with-the-binary submission — full hash set + AV labels + sandbox C2 indicators. |
+| `vulnerability-disclosure` | Tracking a CVE relevant to the org — fresh CVE, 0-day rumour, in-the-wild exploitation. |
+| `supply-chain-compromise` | Backdoored npm/PyPI/cargo package, compromised Docker image, malicious GitHub Action. |
+
+PRs to add new templates are welcome — see [CONTRIBUTE.md](CONTRIBUTE.md).
+The bar for inclusion is "a template several SOC teams could plausibly want."
+
 ## Format of an event template
 
 A `definition.json` is a JSON document conforming to
 `schema_event_template.json`. The schema is a superset of MISP core's
 `event-template-v1.schema.json` plus two library-specific top-level
-fields: `default` (boolean — marks the template as library-managed
+fields: `misp_default` (boolean — marks the template as library-managed
 so MISP will auto-update it) and `library_metadata` (informational
 fields like `compatible_misp_version`, `authors`, `tags`).
 
@@ -60,7 +75,7 @@ A condensed example:
 
 ```jsonc
 {
-  "default": true,
+  "misp_default": true,
   "library_metadata": {
     "compatible_misp_version": "2.5.0",
     "authors": [
@@ -116,8 +131,9 @@ and event-defaults are documented in MISP core's
    **Update from library** on the event-templates index. The loader
    walks every `templates/*/definition.json`, validates it, and
    upserts by uuid. New templates are installed; existing
-   library-managed (`default = 1`) templates are upgraded; rows
-   the operator has explicitly forked (`default = 0`) are skipped.
+   library-managed (`misp_default = 1`) templates are upgraded; rows
+   the operator has explicitly forked (`misp_default = 0`) are
+   skipped.
 3. Library imports default to `active = 0` and `distribution = 1`
    (community). The site admin enables the ones the team wants.
 
