@@ -1,0 +1,336 @@
+{
+  "description": "Capture payment-fraud incidents with bank-account objects and fraud-focused galaxies/taxonomies so analysts can correlate mule accounts, recipients, channels, and social-engineering patterns across a financial sharing community.",
+  "event_defaults": {
+    "analysis": 1,
+    "distribution": 1,
+    "info_template": "Financial fraud — {{date}} — {{field:case_reference}}",
+    "tags": [
+      {
+        "locked": false,
+        "name": "tlp:amber"
+      }
+    ],
+    "threat_level_id": 2
+  },
+  "library_metadata": {
+    "authors": [
+      {
+        "contact": "info@misp-project.org",
+        "name": "MISP Project"
+      }
+    ],
+    "compatible_misp_version": "2.5.0",
+    "tags": [
+      "incident-response",
+      "financial-fraud",
+      "bank-account",
+      "fraud-intelligence",
+      "payment-fraud"
+    ]
+  },
+  "misp_default": true,
+  "name": "Financial fraud case",
+  "schema_version": 1,
+  "structure": [
+    {
+      "help": "Start with the operational facts your peers need for de-duplication and rapid triage in shared financial communities.",
+      "id": "s_case",
+      "label": "Case overview",
+      "type": "section"
+    },
+    {
+      "help": "Your internal case number or ticket id. Keep it stable; it is used in the default event title.",
+      "id": "case_reference",
+      "label": "Case reference",
+      "mandatory": true,
+      "misp": {
+        "category": "Internal reference",
+        "type": "text"
+      },
+      "parent": "s_case",
+      "type": "attribute_field"
+    },
+    {
+      "help": "Short description such as APP scam, invoice fraud, card-not-present refund fraud, business email compromise payout, or account takeover cash-out.",
+      "id": "fraud_type",
+      "label": "Fraud type summary",
+      "mandatory": true,
+      "misp": {
+        "category": "Other",
+        "type": "text"
+      },
+      "parent": "s_case",
+      "type": "attribute_field"
+    },
+    {
+      "help": "When the fraudulent activity was first observed by your team (ISO 8601).",
+      "id": "first_seen",
+      "label": "First seen",
+      "mandatory": true,
+      "misp": {
+        "category": "Other",
+        "type": "datetime"
+      },
+      "parent": "s_case",
+      "type": "attribute_field"
+    },
+    {
+      "help": "Free text is intentional (for example: `USD 24,500 attempted / USD 6,000 settled`).",
+      "id": "loss_amount",
+      "label": "Attempted/actual loss amount",
+      "mandatory": false,
+      "misp": {
+        "category": "Financial fraud",
+        "type": "text"
+      },
+      "parent": "s_case",
+      "type": "attribute_field"
+    },
+    {
+      "help": "Add the transaction, channel, and beneficiary indicators that enable cross-institution correlation.",
+      "id": "s_payment_channel",
+      "label": "Payment and channel indicators",
+      "type": "section"
+    },
+    {
+      "help": "Reference id provided by core banking, PSP, card processor, or Faster Payments rail.",
+      "id": "transaction_reference",
+      "label": "Transaction reference",
+      "mandatory": false,
+      "misp": {
+        "category": "Financial fraud",
+        "type": "text"
+      },
+      "parent": "s_payment_channel",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Examples: SWIFT, SEPA, FPS, ACH, RTP, card transfer, crypto off-ramp.",
+      "id": "payment_rail",
+      "label": "Payment rail",
+      "mandatory": false,
+      "misp": {
+        "category": "Financial fraud",
+        "type": "text"
+      },
+      "parent": "s_payment_channel",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Name as supplied in the payment order or onboarding artifacts.",
+      "id": "beneficiary_name",
+      "label": "Beneficiary/account holder name",
+      "mandatory": false,
+      "misp": {
+        "category": "Targeting data",
+        "type": "target-user"
+      },
+      "parent": "s_payment_channel",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Phone number used by the fraudster (social engineering call-back, mule onboarding, payment redirection).",
+      "id": "contact_phone",
+      "label": "Fraud contact phone",
+      "mandatory": false,
+      "misp": {
+        "category": "Financial fraud",
+        "to_ids_default": true,
+        "type": "phone-number"
+      },
+      "parent": "s_payment_channel",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Email address used in scam communications or payout instructions.",
+      "id": "contact_email",
+      "label": "Fraud contact email",
+      "mandatory": false,
+      "misp": {
+        "category": "Financial fraud",
+        "to_ids_default": true,
+        "type": "email-src"
+      },
+      "parent": "s_payment_channel",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "URL for fake KYC pages, scam landing pages, or redirection portals tied to the fraud flow.",
+      "id": "contact_url",
+      "label": "Fraud portal / payment URL",
+      "mandatory": false,
+      "misp": {
+        "category": "Financial fraud",
+        "to_ids_default": true,
+        "type": "url"
+      },
+      "parent": "s_payment_channel",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Use the dedicated bank-account MISP object so account identifiers and routing details are normalized for correlation. Add one object per recipient/mule account.",
+      "id": "s_bank_accounts",
+      "label": "Bank account objects",
+      "type": "section"
+    },
+    {
+      "help": "Recipient or mule account linked to the fraud case. Use + Add another instance for each additional account.",
+      "id": "obj_bank_account",
+      "label": "Suspicious bank account",
+      "mandatory": true,
+      "object_template": {
+        "name": "bank-account",
+        "pinned_version": 1,
+        "uuid": "ec7fbe43-f4a5-4f5d-8e2f-4d67df5da95b"
+      },
+      "parent": "s_bank_accounts",
+      "relations": [
+        {
+          "help_override": "Full IBAN when available (most useful field for cross-community correlation).",
+          "label_override": "IBAN",
+          "mandatory": false,
+          "object_relation": "iban"
+        },
+        {
+          "help_override": "Local account number if IBAN is unavailable.",
+          "label_override": "Account number",
+          "mandatory": false,
+          "object_relation": "account-number"
+        },
+        {
+          "help_override": "Receiving financial institution as observed.",
+          "label_override": "Bank name",
+          "mandatory": false,
+          "object_relation": "bank-name"
+        },
+        {
+          "help_override": "Bank Identifier Code, when present.",
+          "label_override": "BIC / SWIFT",
+          "mandatory": false,
+          "object_relation": "bic"
+        },
+        {
+          "help_override": "Beneficiary name tied to this account.",
+          "label_override": "Beneficiary",
+          "mandatory": false,
+          "object_relation": "beneficiary"
+        },
+        {
+          "help_override": "ISO currency used for transfers into this account.",
+          "label_override": "Currency",
+          "mandatory": false,
+          "object_relation": "currency-code"
+        }
+      ],
+      "repeatable": true,
+      "type": "object_field"
+    },
+    {
+      "help": "Attach artifacts that peers can use for verification, retro-hunting, and regulatory reporting workflows.",
+      "id": "s_evidence",
+      "label": "Evidence and enrichment",
+      "type": "section"
+    },
+    {
+      "as": "attachment",
+      "help": "Upload remittance slips, screenshots, or payment confirmations (redact customer PII where required).",
+      "id": "payment_proof",
+      "label": "Payment proof or statement",
+      "mandatory": false,
+      "parent": "s_evidence",
+      "repeatable": true,
+      "type": "file_field"
+    },
+    {
+      "help": "One or two lines with context that will help partners decide whether to freeze, reject, or monitor linked payments.",
+      "id": "case_note",
+      "label": "Analyst note",
+      "mandatory": false,
+      "misp": {
+        "category": "Other",
+        "type": "comment"
+      },
+      "parent": "s_evidence",
+      "type": "attribute_field"
+    },
+    {
+      "help": "Map the case to fraud-specific galaxies/taxonomies so downstream communities can query by modus operandi and framework coverage.",
+      "id": "s_classification",
+      "label": "Fraud classification and intelligence context",
+      "type": "section"
+    },
+    {
+      "help": "Choose the sharing color that matches legal/privacy constraints for this case.",
+      "id": "tlp",
+      "label": "TLP",
+      "mandatory": true,
+      "multiple": false,
+      "parent": "s_classification",
+      "restrict_taxonomies": [
+        "tlp"
+      ],
+      "type": "tag_field"
+    },
+    {
+      "help": "Select the ATT&CK4Fraud cluster(s) that describe the fraudster behavior in this case.",
+      "id": "gal_attck4fraud",
+      "label": "ATT&CK4Fraud technique",
+      "mandatory": false,
+      "multiple": true,
+      "parent": "s_classification",
+      "restrict_galaxy_types": [
+        "attck4fraud"
+      ],
+      "type": "galaxy_field"
+    },
+    {
+      "help": "Map the case to the MITRE Fight Fraud Framework cluster(s) used by your community.",
+      "id": "gal_mitre_fight_fraud",
+      "label": "MITRE Fight Fraud Framework",
+      "mandatory": false,
+      "multiple": true,
+      "parent": "s_classification",
+      "restrict_galaxy_types": [
+        "mitre-fight-fraud-framework"
+      ],
+      "type": "galaxy_field"
+    },
+    {
+      "help": "Choose Taxonomy of Fraud cluster(s) to normalize fraud scenario naming across institutions.",
+      "id": "gal_taxonomy_of_fraud",
+      "label": "Taxonomy of Fraud",
+      "mandatory": false,
+      "multiple": true,
+      "parent": "s_classification",
+      "restrict_galaxy_types": [
+        "taxonomy-of-fraud"
+      ],
+      "type": "galaxy_field"
+    },
+    {
+      "help": "Optional cross-reference to law-enforcement, FIU, or consortium identifiers.",
+      "id": "external_case_id",
+      "label": "External partner case id",
+      "mandatory": false,
+      "misp": {
+        "category": "Internal reference",
+        "type": "text"
+      },
+      "parent": "s_classification",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "content": "**Sharing note:** include at least one normalized bank-account object and one fraud framework mapping (ATT&CK4Fraud, MITRE Fight Fraud Framework, or Taxonomy of Fraud) whenever possible. This sharply improves cross-organization correlation and speeds up preventive controls.",
+      "id": "note_sharing",
+      "type": "text_block"
+    }
+  ],
+  "uuid": "d938ef21-bb49-46b8-9f37-e7af9da0b7ba"
+}
