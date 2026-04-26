@@ -1,0 +1,261 @@
+{
+  "description": "Capture an event involving exposed user credentials — paste-site dumps, breach data resold on a marketplace, an OSINT tip, or a notification from a service the org has accounts on. Designed to be filled fast: the headline is *which accounts* and *where they were seen*.",
+  "event_defaults": {
+    "analysis": 1,
+    "distribution": 1,
+    "info_template": "Credential exposure — {{date}} — {{field:source_label}}",
+    "tags": [
+      {
+        "locked": false,
+        "name": "tlp:amber"
+      }
+    ],
+    "threat_level_id": 2
+  },
+  "library_metadata": {
+    "authors": [
+      {
+        "contact": "info@misp-project.org",
+        "name": "MISP Project"
+      }
+    ],
+    "compatible_misp_version": "2.5.0",
+    "tags": [
+      "incident-response",
+      "credential-exposure",
+      "leak",
+      "breach"
+    ]
+  },
+  "misp_default": true,
+  "name": "Credential exposure",
+  "schema_version": 1,
+  "structure": [
+    {
+      "help": "Who's reporting it and where it surfaced. The free-text `source_label` ends up in the event info field; pick something concise (e.g. *PasteBin Apr 2026*, *Breach: ACME 2025*, *HIBP notification*).",
+      "id": "s_overview",
+      "label": "Exposure overview",
+      "type": "section"
+    },
+    {
+      "help": "Short tag for where this exposure came from. Used in the event info field. Free text, no need for a URL.",
+      "id": "source_label",
+      "label": "Source label",
+      "mandatory": true,
+      "misp": {
+        "category": "Internal reference",
+        "type": "text"
+      },
+      "parent": "s_overview",
+      "type": "attribute_field"
+    },
+    {
+      "help": "When you first saw this exposure (not when the underlying breach happened — that goes in the *Breach context* section if known). ISO 8601.",
+      "id": "date_observed",
+      "label": "Date observed",
+      "mandatory": true,
+      "misp": {
+        "category": "Other",
+        "type": "datetime"
+      },
+      "parent": "s_overview",
+      "type": "attribute_field"
+    },
+    {
+      "help": "One or two sentences orienting a reader who scans the events index. Detail belongs in an event report.",
+      "id": "incident_summary",
+      "label": "Short incident summary",
+      "mandatory": false,
+      "misp": {
+        "category": "Other",
+        "type": "comment"
+      },
+      "parent": "s_overview",
+      "type": "attribute_field"
+    },
+    {
+      "help": "URLs, Telegram channels, marketplace listings — wherever you observed the leak. At least one entry is strongly encouraged for traceability.",
+      "id": "s_venue",
+      "label": "Where the credentials were seen",
+      "type": "section"
+    },
+    {
+      "help": "Best single URL pointing at the exposure (paste, marketplace listing, archive). Defang on copy if your tooling requires.",
+      "id": "leak_url",
+      "label": "Primary leak URL",
+      "mandatory": false,
+      "misp": {
+        "category": "External analysis",
+        "comment_template": "Primary venue where the leak was observed",
+        "to_ids_default": false,
+        "type": "url"
+      },
+      "parent": "s_venue",
+      "type": "attribute_field"
+    },
+    {
+      "help": "Mirrors, re-uploads, related archives. One URL per entry.",
+      "id": "additional_leak_url",
+      "label": "Additional leak URL",
+      "mandatory": false,
+      "misp": {
+        "category": "External analysis",
+        "type": "url"
+      },
+      "parent": "s_venue",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "What was actually exposed. Capture representative items rather than dumping every line — large lists belong in an attached file.",
+      "id": "s_accounts",
+      "label": "Affected accounts",
+      "type": "section"
+    },
+    {
+      "help": "Email address visible in the dump. Use **+ Add another instance** for multiple. If the list is long, attach the raw file as a *file_field* below instead of pasting line by line.",
+      "id": "affected_email",
+      "label": "Affected email",
+      "mandatory": false,
+      "misp": {
+        "category": "Targeting data",
+        "type": "target-email"
+      },
+      "parent": "s_accounts",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Non-email account identifier (handle, login, employee id) when one is present alongside the credential.",
+      "id": "affected_username",
+      "label": "Affected username",
+      "mandatory": false,
+      "misp": {
+        "category": "Targeting data",
+        "type": "target-user"
+      },
+      "parent": "s_accounts",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "help": "Email domain or service domain the exposed accounts belong to. Typically your org's domain plus any subsidiary or vendor domain seen in the dump.",
+      "id": "scope_domain",
+      "label": "Domain in scope",
+      "mandatory": false,
+      "misp": {
+        "category": "External analysis",
+        "type": "domain"
+      },
+      "parent": "s_accounts",
+      "repeatable": true,
+      "type": "attribute_field"
+    },
+    {
+      "as": "malware-sample",
+      "help": "If the source is a structured file (CSV, JSON, txt), attach it here rather than pasting individual lines. Large dumps belong in a malware-sample attachment so MISP encrypts at rest.",
+      "id": "leak_dump",
+      "label": "Leak dump (file)",
+      "mandatory": false,
+      "parent": "s_accounts",
+      "repeatable": true,
+      "type": "file_field"
+    },
+    {
+      "help": "How exposed are the credentials? A bare email list is much less severe than usable cleartext password pairs.",
+      "id": "s_severity",
+      "label": "Severity context",
+      "type": "section"
+    },
+    {
+      "help": "Free-form description of what was actually visible: e.g. `email + cleartext password`, `email only`, `email + bcrypt(12)`, `email + MD5`. Hash algorithm details help triage replay risk.",
+      "id": "credential_format",
+      "label": "Credential format",
+      "mandatory": false,
+      "misp": {
+        "category": "Other",
+        "type": "text"
+      },
+      "parent": "s_severity",
+      "type": "attribute_field"
+    },
+    {
+      "help": "Rough magnitude of the dump (e.g. `~12k`, `1.3M`). Free-form text rather than an integer because most operators only have an order-of-magnitude estimate at triage time.",
+      "id": "approx_record_count",
+      "label": "Approximate record count",
+      "mandatory": false,
+      "misp": {
+        "category": "Other",
+        "type": "text"
+      },
+      "parent": "s_severity",
+      "type": "attribute_field"
+    },
+    {
+      "help": "If this exposure traces back to a known breach, capture the linkage here so the event correlates with prior reports.",
+      "id": "s_breach",
+      "label": "Breach context",
+      "type": "section"
+    },
+    {
+      "help": "Common name for the original breach (e.g. *ACME 2024*, *Collection #1*). Leave blank if unknown — speculation here corrupts correlation.",
+      "id": "breach_name",
+      "label": "Source breach name",
+      "mandatory": false,
+      "misp": {
+        "category": "Internal reference",
+        "type": "text"
+      },
+      "parent": "s_breach",
+      "type": "attribute_field"
+    },
+    {
+      "help": "Approximate date of the underlying breach, if known. Distinct from *Date observed* above.",
+      "id": "breach_date",
+      "label": "Source breach date",
+      "mandatory": false,
+      "misp": {
+        "category": "Other",
+        "type": "datetime"
+      },
+      "parent": "s_breach",
+      "type": "attribute_field"
+    },
+    {
+      "help": "TLP for the report and any actor / campaign attribution you can support with evidence.",
+      "id": "s_classification",
+      "label": "Classification and attribution",
+      "type": "section"
+    },
+    {
+      "help": "Pick one. Override the `tlp:amber` default if your analyst's TLP differs.",
+      "id": "tlp",
+      "label": "TLP",
+      "mandatory": true,
+      "multiple": false,
+      "parent": "s_classification",
+      "restrict_taxonomies": [
+        "tlp"
+      ],
+      "type": "tag_field"
+    },
+    {
+      "help": "Optional — only fill in if your confidence is reasonable. Most credential dumps are sold on by intermediaries; direct attribution at first observation is rare.",
+      "id": "threat_actor",
+      "label": "Suspected threat actor",
+      "mandatory": false,
+      "multiple": false,
+      "parent": "s_classification",
+      "restrict_galaxy_types": [
+        "threat-actor"
+      ],
+      "type": "galaxy_field"
+    },
+    {
+      "content": "**A note on PII:** depending on jurisdiction, the affected email/username list may be subject to data-protection rules. Set the TLP and distribution accordingly, and consider whether a separate access-controlled event report is more appropriate than capturing every account inline.",
+      "id": "note_pii",
+      "type": "text_block"
+    }
+  ],
+  "uuid": "f04246eb-c26a-4d69-a602-885ab7f8b38b"
+}
