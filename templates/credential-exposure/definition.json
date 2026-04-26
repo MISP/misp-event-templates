@@ -62,16 +62,13 @@
       "type": "attribute_field"
     },
     {
-      "help": "One or two sentences orienting a reader who scans the events index. Detail belongs in an event report.",
+      "default_content": "## Summary\n\n_What was leaked, where it surfaced, and the apparent freshness._\n\n## Affected accounts\n\n- \n\n## Suspected source\n\n_Stealer family, breached service, infostealer log dump, etc._",
+      "help": "Free-form Markdown — what was leaked, where, and how fresh the data appears. Saved as an EventReport attached to the new event.",
       "id": "incident_summary",
-      "label": "Short incident summary",
+      "label": "Incident summary",
       "mandatory": false,
-      "misp": {
-        "category": "Other",
-        "type": "comment"
-      },
       "parent": "s_overview",
-      "type": "attribute_field"
+      "type": "event_report"
     },
     {
       "help": "URLs, Telegram channels, marketplace listings — wherever you observed the leak. At least one entry is strongly encouraged for traceability.",
